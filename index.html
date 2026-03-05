@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>華語文中心 | LHU Chinese Language Center</title>
+    <style>
+        /* Basic Reset */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        a {
+            color: #004b87;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Header & Language Dropdown */
+        .header {
+            background-color: #004b87;
+            /* LHU Blue */
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin: 0;
+        }
+
+        .lang-switcher select {
+            padding: 8px 12px;
+            font-size: 16px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            background-color: white;
+            cursor: pointer;
+        }
+
+        /* Layout */
+        .container {
+            display: flex;
+            max-width: 1200px;
+            margin: 20px auto;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            min-height: 600px;
+        }
+
+        /* Sidebar Subtabs */
+        .sidebar {
+            width: 250px;
+            background-color: #e9ecef;
+            border-right: 1px solid #ddd;
+            flex-shrink: 0;
+        }
+
+        .nav-menu {
+            display: none;
+            /* Hidden by default, toggled by JS */
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-menu.active {
+            display: block;
+        }
+
+        .nav-menu li {
+            padding: 15px 20px;
+            border-bottom: 1px solid #ddd;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-weight: 500;
+        }
+
+        .nav-menu li:hover {
+            background-color: #d1d7dc;
+        }
+
+        .nav-menu li.active {
+            background-color: white;
+            color: #004b87;
+            border-left: 4px solid #004b87;
+            font-weight: bold;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex-grow: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .lang-section {
+            display: none;
+        }
+
+        .lang-section.active {
+            display: block;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Content Formatting */
+        h2 {
+            color: #004b87;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+
+        h3 {
+            color: #d9534f;
+            margin: 25px 0 10px 0;
+            font-size: 18px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            background-color: #004b87;
+            color: white;
+        }
+
+        ul,
+        ol {
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        p {
+            margin-bottom: 15px;
+        }
+
+        strong {
+            color: #000;
+        }
+
+        /* Image Grid Styles */
+        .image-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 20px 0;
+            justify-content: flex-start;
+        }
+
+        .image-grid img {
+            width: 180px;
+            height: 135px;
+            object-fit: cover;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            transition: transform 0.2s;
+            border: 1px solid #eee;
+        }
+
+        .image-grid img:hover {
+            transform: scale(1.03);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .single-image {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .single-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .programmer-note {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 10px;
+            border-left: 4px solid #ffeeba;
+            margin-top: 5px;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid #ddd;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .image-grid img {
+                width: 100%;
+                height: auto;
+                max-width: 220px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="header">
+        <h1 id="site-title">華語文中心 | Chinese Language Center</h1>
+        <div class="lang-switcher">
+            <select id="languageSelect" onchange="changeLanguage(this.value)">
+                <option value="zh">中文 (Chinese)</option>
+                <option value="en">English</option>
+                <option value="vi">Tiếng Việt (Vietnamese)</option>
+                <option value="th">ไทย (Thai)</option>
+            </select>
+        </div>
+    </header>
+
+    <div class="container">
+        <aside class="sidebar">
+            <ul class="nav-menu active" id="menu-zh">
+                <li class="active" onclick="switchTab('tab1')">中心介紹</li>
+                <li onclick="switchTab('tab2')">成員職掌</li>
+                <li onclick="switchTab('tab3')">學習與生活環境</li>
+                <li onclick="switchTab('tab4')">開課時間</li>
+                <li onclick="switchTab('tab5')">課程簡介</li>
+                <li onclick="switchTab('tab6')">費用資訊</li>
+                <li onclick="switchTab('tab7')">入學申請與辦法</li>
+                <li onclick="switchTab('tab8')">聯絡方式</li>
+            </ul>
+            <ul class="nav-menu" id="menu-en">
+                <li class="active" onclick="switchTab('tab1')">About the Center</li>
+                <li onclick="switchTab('tab2')">Staff & Responsibilities</li>
+                <li onclick="switchTab('tab3')">Learning & Living Environment</li>
+                <li onclick="switchTab('tab4')">Term Dates</li>
+                <li onclick="switchTab('tab5')">Course Introduction</li>
+                <li onclick="switchTab('tab6')">Fees</li>
+                <li onclick="switchTab('tab7')">Admissions & Application</li>
+                <li onclick="switchTab('tab8')">Contact Information</li>
+            </ul>
+            <ul class="nav-menu" id="menu-vi">
+                <li class="active" onclick="switchTab('tab1')">Giới thiệu về Trung tâm</li>
+                <li onclick="switchTab('tab2')">Đội ngũ nhân sự</li>
+                <li onclick="switchTab('tab3')">Môi trường Học tập & Sinh hoạt</li>
+                <li onclick="switchTab('tab4')">Thời gian khai giảng</li>
+                <li onclick="switchTab('tab5')">Giới thiệu khóa học</li>
+                <li onclick="switchTab('tab6')">Thông tin Chi phí</li>
+                <li onclick="switchTab('tab7')">Đăng ký & Tuyển sinh</li>
+                <li onclick="switchTab('tab8')">Thông tin liên hệ</li>
+            </ul>
+            <ul class="nav-menu" id="menu-th">
+                <li class="active" onclick="switchTab('tab1')">เกี่ยวกับศูนย์ภาษาจีน</li>
+                <li onclick="switchTab('tab2')">บุคลากรและขอบเขตหน้าที่</li>
+                <li onclick="switchTab('tab3')">สภาพแวดล้อมการเรียน</li>
+                <li onclick="switchTab('tab4')">กำหนดการเปิดเรียน</li>
+                <li onclick="switchTab('tab5')">แนะนำหลักสูตร</li>
+                <li onclick="switchTab('tab6')">ค่าใช้จ่าย</li>
+                <li onclick="switchTab('tab7')">การสมัครเรียน</li>
+                <li onclick="switchTab('tab8')">ข้อมูลการติดต่อ</li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <!-- 中文內容 -->
+            <div id="content-zh" class="lang-section active">
+                <div id="zh-tab1" class="tab-content active">
+                    <h2>中心介紹</h2>
+                    <p>龍華科技大學是一所注重專業教育與全人教育歷史悠久的高等學府，華語文中心隸屬國際暨兩岸合作處，有堅強的師資陣容，完善的軟硬體設備，所有教授華語課程的老師都具多年豐富的華語教學經驗。</p>
+                    <p>華語文教學中心針對外籍學生需求，開設多種不同的華語課程。為使外國學生迅速適應台灣生活，本中心除課堂上教授正規課程，亦積極推展增進華語之各種文化活動與戶外教學，協助外國學生在真實而融洽的環境中愉快地學習華語。
+                    </p>
+
+                    <h3 style="margin-top: 40px; border-top: 1px solid #eee; padding-top: 20px;">師資介紹</h3>
+                    <p>本中心擁有堅強的師資陣容，所有教師均具備豐富的華語教學經驗。</p>
+                    <p><a href="https://docs.google.com/spreadsheets/d/12_r8c0udLNjKn1_Y-UOWTWNAopNBPXt86PC5yzOdu9M/edit?usp=sharing"
+                            target="_blank" style="font-weight: bold; font-size: 18px;">👉 點此查看詳細師資介紹</a></p>
+                </div>
+                <div id="zh-tab2" class="tab-content">
+                    <h2>成員職掌</h2>
+                    <table>
+                        <tr>
+                            <th>姓名</th>
+                            <th>電話</th>
+                            <th>信箱</th>
+                            <th>承辦業務</th>
+                        </tr>
+                        <tr>
+                            <td>何欣芸</td>
+                            <td>+886-2-82093211#2508</td>
+                            <td>violet@gm.lhu.edu.tw</td>
+                            <td>華語文中心主任<br>綜理中心各項業務</td>
+                        </tr>
+                        <tr>
+                            <td>黎方東</td>
+                            <td>+886-2-82093211#2510</td>
+                            <td>tristanlpd@mail.lhu.edu.tw</td>
+                            <td>1. 協助新南向及國專部華語課程之分級測驗、分班作業與滾動式調整。<br>2. 配合華測快篩與正式華測成績，彙整學生學習狀況，供分班與課務調整作業參考。<br>3.
+                                定期協助了解各班課堂學習及教學相關情形，作為課務運作之參考。<br>4. 協助處理課務運作與教室使用相關事宜，並進行必要之溝通與協調。<br>5.
+                                協助辦理華語中心臨時交辦之相關行政與教學支援事項。</td>
+                        </tr>
+                        <tr>
+                            <td>邱鈺婷</td>
+                            <td>+886-2-82093211#2506</td>
+                            <td>mina@gm.lhu.edu.tw</td>
+                            <td>1. 華語新生入學相關事宜。<br>2. 開立華語生所需相關文件。<br>3. 協助安排每月華語測驗報名。<br>4. 安排華語快篩作業。<br>5.
+                                協助華語教師相關庶務。<br>6. 其他長官交辦事務。</td>
+                        </tr>
+                    </table>
+                </div>
+                <div id="zh-tab3" class="tab-content">
+                    <h2>學習與生活環境</h2>
+                    <h3>華語中心教室</h3>
+                    <p>本中心設有17間華語文專用教室，提供舒適的華語學習環境。教室配備教師用電腦、投影設備及玻璃白板，部分教室另設觸控式螢幕，以提升教學互動與學習成效。</p>
+                    <!-- 教室圖片網格 (8張) -->
+                    <div class="image-grid">
+                        <img src="images/classroom/classroom1.jpg" alt="教室 1">
+                        <img src="images/classroom/classroom2.jpg" alt="教室 2">
+                        <img src="images/classroom/classroom3.jpg" alt="教室 3">
+                        <img src="images/classroom/classroom4.jpg" alt="教室 4">
+                        <img src="images/classroom/classroom5.jpg" alt="教室 5">
+                        <img src="images/classroom/classroom6.jpg" alt="教室 6">
+                        <img src="images/classroom/classroom7.jpg" alt="教室 7">
+                        <img src="images/classroom/classroom8.jpg" alt="教室 8">
+                    </div>
+
+                    <h3>圖書館介紹</h3>
+                    <p>龍華科技大學圖書館是校園重要的學習空間，提供豐富的書籍與電子資源，協助新生快速適應大學課程。館內設有安靜閱讀區與自習座位，適合準備報告與考試。也提供數位查詢與借閱服務，使用方便。歡迎新生多加利用圖書館資源，開啟充實的大學學習生活。
+                    </p>
+                    <!-- 圖書館圖片網格 (7張) -->
+                    <div class="image-grid">
+                        <img src="images/library/lib1.jpg" alt="圖書館 1">
+                        <img src="images/library/lib2.gif" alt="圖書館 2 (動畫)">
+                        <img src="images/library/lib3.jpg" alt="圖書館 3">
+                        <img src="images/library/lib4.jpg" alt="圖書館 4">
+                        <img src="images/library/lib5.jpg" alt="圖書館 5">
+                        <img src="images/library/lib6.jpg" alt="圖書館 6">
+                        <img src="images/library/lib7.jpg" alt="圖書館 7">
+                    </div>
+
+                    <h3>學生宿舍介紹</h3>
+                    <p>龍華科技大學（LHU）提供舒適便利的校內宿舍，讓學生安心學習與生活。宿舍多為三至四人房型，設有床位、書桌、衣櫃與網路等基本設備，並提供洗衣間與公共交誼空間，滿足日常生活需求。宿舍採門禁管理制度，重視住宿安全與生活品質。宿舍位置鄰近教學區與校園設施，交通便利、機能完善，是學生理想的住宿選擇。
+                    </p>
+                    <!-- 宿舍圖片網格 (8張) -->
+                    <div class="image-grid">
+                        <img src="images/dorm/dorm1.png" alt="宿舍 1">
+                        <img src="images/dorm/dorm2.jpg" alt="宿舍 2">
+                        <img src="images/dorm/dorm3.jpg" alt="宿舍 3">
+                        <img src="images/dorm/dorm4.jpg" alt="宿舍 4">
+                        <img src="images/dorm/dorm5.jpg" alt="宿舍 5">
+                        <img src="images/dorm/dorm6.jpg" alt="宿舍 6">
+                        <img src="images/dorm/dorm7.jpg" alt="宿舍 7">
+                        <img src="images/dorm/dorm8.jpg" alt="宿舍 8">
+                        <!-- 原描述dorm2到dorm9共8張，加上dorm1.png可能9張，但總數要求8張，故只放dorm1.png + dorm2.jpg~dorm8.jpg 共8張 -->
+                    </div>
+                </div>
+                <div id="zh-tab4" class="tab-content">
+                    <h2>開課時間</h2>
+                    <p><strong>申請截止日：</strong>每期開課日前45天（約一個半月）截止申請。</p>
+                    <ul>
+                        <li>(1) <strong>秋季班：</strong>開課日期為 2026年3月5日（使用《當代中文課程》第二冊），申請已截止。</li>
+                        <li>(2) <strong>春季班：</strong>預計開課日期為 2026年3月23日（使用《當代中文課程》第一冊），申請已截止。</li>
+                    </ul>
+                    <p><em>(註: 實際開課日期將視實際情況調整)</em></p>
+                </div>
+                <div id="zh-tab5" class="tab-content">
+                    <h2>課程簡介</h2>
+                    <div class="single-image">
+                        <img src="images/coursemap.png" alt="課程地圖">
+                    </div>
+                    <!-- 將原本在div外的ol移入tab5內 -->
+                    <ol>
+                        <li>本中心每年開設春、秋兩期華語課程。</li>
+                        <li>春季班及秋季班每週上課 20 小時，每學期授課 18 週，總計 360 小時。</li>
+                        <li>依學生華語能力進行分級分班，安排至適合之班級就讀。</li>
+                        <li>目前僅開設華語基礎級課程：第一學期使用《當代中文課程》第一冊，第二學期使用《當代中文課程》第二冊。</li>
+                        <li>上課時段依各班課表規定辦理。</li>
+                    </ol>
+                </div>
+                <div id="zh-tab6" class="tab-content">
+                    <h2>費用資訊</h2>
+                    <h3>課程費用</h3>
+                    <ul>
+                        <li>秋季班: 39,000台幣</li>
+                        <li>春季班: 39,000台幣</li>
+                    </ul>
+                    <h3>住宿費用</h3>
+                    <ul>
+                        <li>秋季班住宿費: 15,700台幣</li>
+                        <li>春季班住宿費: 15,700台幣</li>
+                    </ul>
+                </div>
+                <div id="zh-tab7" class="tab-content">
+                    <h2>入學申請與辦法</h2>
+                    <h3>入學申請表格與系統</h3>
+                    <ul>
+                        <li><a href="https://oia.lhu.edu.tw/var/file/7/1007/img/45/165860001.pdf" target="_blank">📄
+                                華語生入學申請表</a></li>
+                        <li><a href="https://appliform.lhu.edu.tw/" target="_blank">🌐 外籍生申請入學系統</a></li>
+                        <li><a href="https://oia.lhu.edu.tw/var/file/7/1007/img/45/552929856.pdf" target="_blank">📄
+                                外籍學生入學申請注意事項</a></li>
+                    </ul>
+                    <h3>申請文件與招生辦法</h3>
+                    <ul>
+                        <li><strong>入學申請表</strong></li>
+                        <li><strong>財力證明：</strong>由銀行開出至少2,500美金或等值之貴國貨幣紙本存款證明。</li>
+                        <li><strong>護照或居留證影本：</strong>申請入學時如尚未持有護照，可俟報到時繳交。</li>
+                        <li><strong>資格：</strong>申請人應為未具僑生身份且不具中華民國國籍之外國籍學生 (不含港澳生及大陸地區學生)。</li>
+                    </ul>
+                    <p><em>註：已持居留證者（即不需要本中心在學證明延長簽證者），可免繳財力證明，僅須附居留證影本即可。</em></p>
+                </div>
+                <div id="zh-tab8" class="tab-content">
+                    <h2>聯絡方式</h2>
+                    <p><strong>地址：</strong>333326台灣桃園市龜山區萬壽路一段300號</p>
+                    <p><strong>電話：</strong>+886-2-82093211 #2506</p>
+                    <p><strong>電子郵件：</strong><a href="mailto:mina@gm.lhu.edu.tw">mina@gm.lhu.edu.tw</a></p>
+                </div>
+            </div>
+
+            <!-- 英文內容 -->
+            <div id="content-en" class="lang-section">
+                <div id="en-tab1" class="tab-content active">
+                    <h2>About the Center</h2>
+                    <p>Longhwa University of Science and Technology (LHU) is a prestigious institution with a
+                        long-standing history of prioritizing both professional expertise and holistic education.</p>
+                    <p>Our Chinese Language Center (CLC), affiliated with the Office of International and Cross-Strait
+                        Cooperation, boasts a distinguished faculty and state-of-the-art facilities. All our instructors
+                        possess extensive, multi-year experience in teaching Mandarin as a second language.</p>
+                    <p>To meet the diverse needs of international students, the CLC offers a wide range of specialized
+                        Mandarin programs. To ensure students adapt quickly to life in Taiwan, we complement formal
+                        classroom instruction with vibrant cultural activities and outdoor field trips, fostering an
+                        enjoyable and immersive learning journey within a warm, authentic environment.</p>
+                    <h3 style="margin-top: 40px; border-top: 1px solid #eee; padding-top: 20px;">Faculty Profiles</h3>
+                    <p><a href="https://docs.google.com/spreadsheets/d/1OrAy7bmMYMWl2XMoM42-mOSFJ8tJvZKi/edit?gid=60267248#gid=60267248"
+                            target="_blank" style="font-weight: bold; font-size: 18px;">👉 Click here to view Faculty
+                            Profiles</a></p>
+                </div>
+                <div id="en-tab2" class="tab-content">
+                    <h2>Staff & Responsibilities</h2>
+                    <table>
+                        <tr>
+                            <th>Name</th>
+                            <th>Contact</th>
+                            <th>Email</th>
+                            <th>Key Responsibilities</th>
+                        </tr>
+                        <tr>
+                            <td>He, Sin-Yun</td>
+                            <td>+886-2-82093211 #2508</td>
+                            <td>violet@gm.lhu.edu.tw</td>
+                            <td>Director of Chinese Language Center<br>Overall management of all center operations and
+                                strategic planning.</td>
+                        </tr>
+                        <tr>
+                            <td>Tristan Le</td>
+                            <td>+886-2-82093211 #2510</td>
+                            <td>tristanlpd@mail.lhu.edu.tw</td>
+                            <td>1. Coordination of placement tests and class assignments for New Southbound and
+                                International Industrial programs.<br>2. Monitoring student progress based on TOCFL
+                                screening and official test results.<br>3. Conducting regular class observations and
+                                teaching assessments.<br>4. Managing classroom scheduling and administrative
+                                coordination.<br>5. Providing general administrative and teaching support.</td>
+                        </tr>
+                        <tr>
+                            <td>Chiu, Yu-Ting</td>
+                            <td>+886-2-82093211 #2506</td>
+                            <td>mina@gm.lhu.edu.tw</td>
+                            <td>1. Handling admissions and enrollment for new international students.<br>2. Issuing
+                                official certificates and student documents.<br>3. Coordinating monthly TOCFL (Mandarin
+                                proficiency test) registrations.<br>4. Arranging Mandarin language screening
+                                assessments.<br>5. Providing administrative support to faculty members.<br>6. Other
+                                assigned administrative duties.</td>
+                        </tr>
+                    </table>
+                </div>
+                <div id="en-tab3" class="tab-content">
+                    <h2>Learning & Living Environment</h2>
+                    <h3>Our Facilities</h3>
+                    <p>The Center features 17 dedicated Mandarin classrooms, providing a comfortable and professional
+                        environment for language learning. Each classroom is fully equipped with instructor computers,
+                        advanced projection systems, and glass whiteboards. Additionally, selected classrooms are
+                        outfitted with interactive touchscreens to further enhance classroom engagement and maximize
+                        learning effectiveness.</p>
+                    <!-- Classroom images grid (8) -->
+                    <div class="image-grid">
+                        <img src="images/classroom/classroom1.jpg" alt="Classroom 1">
+                        <img src="images/classroom/classroom2.jpg" alt="Classroom 2">
+                        <img src="images/classroom/classroom3.jpg" alt="Classroom 3">
+                        <img src="images/classroom/classroom4.jpg" alt="Classroom 4">
+                        <img src="images/classroom/classroom5.jpg" alt="Classroom 5">
+                        <img src="images/classroom/classroom6.jpg" alt="Classroom 6">
+                        <img src="images/classroom/classroom7.jpg" alt="Classroom 7">
+                        <img src="images/classroom/classroom8.jpg" alt="Classroom 8">
+                    </div>
+
+                    <h3>Library Overview</h3>
+                    <p>The Longhwa University of Science and Technology Library is a vital learning hub on campus,
+                        providing an extensive collection of books and electronic resources to help new students quickly
+                        adapt to their university coursework. The library features quiet reading zones and self-study
+                        areas, ideal for preparing reports and studying for exams. Digital search and automated lending
+                        services are also available for maximum convenience. We encourage all new students to take full
+                        advantage of the library's resources to embark on an enriching academic journey.</p>
+                    <!-- Library images grid (7) -->
+                    <div class="image-grid">
+                        <img src="images/library/lib1.jpg" alt="Library 1">
+                        <img src="images/library/lib2.gif" alt="Library 2 (gif)">
+                        <img src="images/library/lib3.jpg" alt="Library 3">
+                        <img src="images/library/lib4.jpg" alt="Library 4">
+                        <img src="images/library/lib5.jpg" alt="Library 5">
+                        <img src="images/library/lib6.jpg" alt="Library 6">
+                        <img src="images/library/lib7.jpg" alt="Library 7">
+                    </div>
+
+                    <h3>Accommodation & Housing</h3>
+                    <p>Longhwa University of Science and Technology (LHU) offers comfortable and convenient on-campus
+                        dormitories, ensuring students can focus on their studies and life with peace of mind. Most
+                        rooms are designed for three to four occupants and are equipped with essential amenities such as
+                        beds, desks, wardrobes, and internet access. Additionally, laundry rooms and public lounge
+                        spaces are provided to meet daily needs. The dormitories implement a secure access control
+                        system, prioritizing residential safety and quality of life. Strategically located near academic
+                        buildings and campus facilities, these dormitories offer excellent accessibility and
+                        comprehensive amenities, making them an ideal choice for students.</p>
+                    <!-- Dorm images grid (8) -->
+                    <div class="image-grid">
+                        <img src="images/dorm/dorm1.png" alt="Dorm 1">
+                        <img src="images/dorm/dorm2.jpg" alt="Dorm 2">
+                        <img src="images/dorm/dorm3.jpg" alt="Dorm 3">
+                        <img src="images/dorm/dorm4.jpg" alt="Dorm 4">
+                        <img src="images/dorm/dorm5.jpg" alt="Dorm 5">
+                        <img src="images/dorm/dorm6.jpg" alt="Dorm 6">
+                        <img src="images/dorm/dorm7.jpg" alt="Dorm 7">
+                        <img src="images/dorm/dorm8.jpg" alt="Dorm 8">
+                    </div>
+                </div>
+                <div id="en-tab4" class="tab-content">
+                    <h2>Term Dates & Application Deadlines</h2>
+                    <p><strong>Application Deadline:</strong> Applications must be submitted at least 45 days
+                        (approximately 1.5 months) prior to the start of each term.</p>
+                    <ul>
+                        <li><strong>Autumn Term:</strong> Commences on March 5, 2026 (Curriculum: A Course in
+                            Contemporary Chinese, Vol. 2). Applications are now closed.</li>
+                        <li><strong>Spring Term:</strong> Expected to commence on March 23, 2026 (Curriculum: A Course
+                            in Contemporary Chinese, Vol. 1). Applications are now closed.</li>
+                    </ul>
+                    <p><em>Note: The actual commencement date may be subject to adjustment based on specific
+                            circumstances.</em></p>
+                </div>
+                <div id="en-tab5" class="tab-content">
+                    <h2>Course Introduction</h2>
+                    <div class="single-image"><img src="images/coursemap.png" alt="Course Map"></div>
+                    <ul>
+                        <li>The Center offers two Mandarin language terms annually: Spring and Autumn.</li>
+                        <li>Both terms consist of 20 instruction hours per week over 18 weeks, totaling 360 hours per
+                            semester.</li>
+                        <li>Students are placed into appropriate levels based on their individual Mandarin proficiency
+                            assessments.</li>
+                        <li>Currently, the Center exclusively offers Elementary Mandarin courses. The curriculum
+                            utilizes "A Course in Contemporary Chinese (Vol. 1)" for the first semester and "Vol. 2" for
+                            the second semester.</li>
+                        <li>Class sessions are conducted in accordance with the specific timetable assigned to each
+                            class.</li>
+                    </ul>
+                </div>
+                <div id="en-tab6" class="tab-content">
+                    <h2>Fees</h2>
+                    <h3>Tuition Fees</h3>
+                    <ul>
+                        <li>Autumn Term: NT$39,000</li>
+                        <li>Spring Term: NT$39,000</li>
+                    </ul>
+                    <h3>Accommodation Fees</h3>
+                    <ul>
+                        <li>Autumn Term: NT$15,700</li>
+                        <li>Spring Term: NT$15,700</li>
+                    </ul>
+                </div>
+                <div id="en-tab7" class="tab-content">
+                    <h2>Admissions & Application</h2>
+                    <h3>Application Forms & Systems</h3>
+                    <ul>
+                        <li><a href="https://oia.lhu.edu.tw/var/file/7/1007/img/45/165860001.pdf" target="_blank">📄
+                                Mandarin Student Admission Application Form</a></li>
+                        <li><a href="https://appliform.lhu.edu.tw/" target="_blank">🌐 International Student Online
+                                Admission System</a></li>
+                        <li><a href="https://oia.lhu.edu.tw/var/file/7/1007/img/45/552929856.pdf" target="_blank">📄
+                                Important Notes for International Student Admission</a></li>
+                    </ul>
+                    <h3>Required Application Documents</h3>
+                    <ul>
+                        <li><strong>Admission Application Form</strong></li>
+                        <li><strong>Financial Statement:</strong> An official paper bank statement showing a balance of
+                            at least USD $2,500 (or its equivalent in your local currency).</li>
+                        <li><strong>Copy of Passport or Alien Resident Certificate (ARC):</strong> If you do not yet
+                            hold a passport at the time of application, it may be submitted upon registration.</li>
+                        <li><strong>Eligibility:</strong> Applicants must be international students who do not hold
+                            Overseas Chinese student status and do not hold Republic of China (Taiwan) nationality (this
+                            excludes students from Hong Kong, Macau, and Mainland China).</li>
+                    </ul>
+                    <p><em>Note: Applicants who already hold a valid ARC (and do not require an Enrollment Certificate
+                            from the Center for visa extension purposes) are exempt from submitting a financial
+                            statement; only a copy of the ARC is required.</em></p>
+                </div>
+                <div id="en-tab8" class="tab-content">
+                    <h2>Contact Information</h2>
+                    <p><strong>Address:</strong> No. 300, Sec. 1, Wanshou Rd., Guishan Dist., Taoyuan City 333326,
+                        Taiwan (R.O.C.)</p>
+                    <p><strong>Tel:</strong> +886-2-82093211 ext. 2506</p>
+                    <p><strong>Email:</strong> <a href="mailto:mina@gm.lhu.edu.tw">mina@gm.lhu.edu.tw</a></p>
+                </div>
+            </div>
+
+            <!-- 越南文內容 (僅保留關鍵結構，圖片路徑相同) -->
+            <div id="content-vi" class="lang-section">
+                <div id="vi-tab1" class="tab-content active">
+                    <h2>Giới thiệu về Trung tâm</h2>
+                    <p>Đại học Khoa học và Công nghệ Long Hoa (LHU) là một cơ sở giáo dục đại học lâu đời, luôn chú
+                        trọng vào việc đào tạo chuyên nghiệp và giáo dục toàn diện.</p>
+                    <p>Trung tâm Tiếng Hoa trực thuộc Phòng Hợp tác Quốc tế và Giao lưu Hai bờ, sở hữu đội ngũ giảng
+                        viên hùng hậu cùng hệ thống trang thiết bị hoàn thiện. Tất cả giáo viên giảng dạy tại đây đều có
+                        nhiều năm kinh nghiệm phong phú trong lĩnh vực sư phạm tiếng Hoa.</p>
+                    <p>Nhằm đáp ứng nhu cầu của sinh viên quốc tế, Trung tâm thiết kế đa dạng các khóa học tiếng Hoa
+                        khác nhau. Để giúp sinh viên nhanh chóng thích nghi với cuộc sống tại Đài Loan, ngoài các giờ
+                        học chính quy trên lớp, Trung tâm còn tích cực tổ chức các hoạt động văn hóa và tham quan ngoại
+                        khóa, giúp sinh viên học tập một cách vui vẻ trong một môi trường chân thực và hòa hợp.</p>
+                </div>
+                <div id="vi-tab2" class="tab-content">
+                    <h2>Đội ngũ nhân sự</h2>
+                    <table>
+                        <tr>
+                            <th>Họ và tên</th>
+                            <th>Điện thoại</th>
+                            <th>Email</th>
+                            <th>Nghiệp vụ phụ trách</th>
+                        </tr>
+                        <tr>
+                            <td>He, Sin-Yun</td>
+                            <td>+886-2-82093211 #2508</td>
+                            <td>violet@gm.lhu.edu.tw</td>
+                            <td>Giám đốc Trung tâm Tiếng Hoa<br>Tổng quản lý và điều hành mọi hoạt động của trung tâm.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Tristan Le</td>
+                            <td>+886-2-82093211 #2510</td>
+                            <td>tristanlpd@mail.lhu.edu.tw</td>
+                            <td>1. Hỗ trợ kiểm tra xếp lớp và phân lớp cho sinh viên chương trình Hướng Nam Mới và Hệ
+                                chuyên ban Quốc tế.<br>2. Tổng hợp kết quả thi thử và thi chính thức TOCFL để theo dõi
+                                tiến độ học tập của sinh viên.<br>3. Theo dõi tình hình giảng dạy và học tập tại các lớp
+                                định kỳ.<br>4. Điều phối việc sử dụng phòng học và các vấn đề liên quan đến giáo
+                                vụ.<br>5. Hỗ trợ các công tác hành chính và giảng dạy khác theo yêu cầu.</td>
+                        </tr>
+                        <tr>
+                            <td>Chiu, Yu-Ting</td>
+                            <td>+886-2-82093211 #2506</td>
+                            <td>mina@gm.lhu.edu.tw</td>
+                            <td>1. Phụ trách các vấn đề nhập học cho tân sinh viên hệ tiếng Hoa.<br>2. Cấp các loại giấy
+                                tờ, chứng nhận liên quan cho sinh viên.<br>3. Hỗ trợ đăng ký các kỳ thi năng lực tiếng
+                                Hoa (TOCFL) hàng tháng.<br>4. Sắp xếp các buổi kiểm tra nhanh trình độ tiếng Hoa.<br>5.
+                                Hỗ trợ các công việc hành chính cho giáo viên.<br>6. Các công việc khác theo chỉ đạo của
+                                cấp trên.</td>
+                        </tr>
+                    </table>
+                </div>
+                <div id="vi-tab3" class="tab-content">
+                    <h2>Môi trường Học tập & Sinh hoạt</h2>
+                    <h3>Cơ sở vật chất</h3>
+                    <p>Trung tâm sở hữu 17 phòng học chuyên dụng dành cho tiếng Hoa, mang đến một không gian học tập
+                        thoải mái và chuyên nghiệp. Mỗi phòng học đều được trang bị máy tính cho giảng viên, hệ thống
+                        máy chiếu và bảng trắng bằng kính. Đặc biệt, một số phòng học còn được tích hợp màn hình cảm ứng
+                        tương tác nhằm nâng cao hiệu quả tương tác giảng dạy và tối ưu hóa kết quả học tập của sinh
+                        viên.</p>
+                    <div class="image-grid"><img src="images/classroom/classroom1.jpg" alt="Phòng học 1"><img
+                            src="images/classroom/classroom2.jpg" alt="Phòng học 2"><img
+                            src="images/classroom/classroom3.jpg" alt="Phòng học 3"><img
+                            src="images/classroom/classroom4.jpg" alt="Phòng học 4"><img
+                            src="images/classroom/classroom5.jpg" alt="Phòng học 5"><img
+                            src="images/classroom/classroom6.jpg" alt="Phòng học 6"><img
+                            src="images/classroom/classroom7.jpg" alt="Phòng học 7"><img
+                            src="images/classroom/classroom8.jpg" alt="Phòng học 8"></div>
+                    <h3>Giới thiệu về Thư viện</h3>
+                    <p>Thư viện của Đại học Khoa học và Công nghệ Long Hoa là một không gian học tập quan trọng trong
+                        khuôn viên trường, cung cấp nguồn sách và tài nguyên điện tử phong phú nhằm hỗ trợ tân sinh viên
+                        nhanh chóng thích nghi với chương trình đại học. Trong thư viện có khu vực đọc yên tĩnh và chỗ
+                        ngồi tự học, rất phù hợp để chuẩn bị bài báo cáo và ôn tập thi cử. Thư viện cũng cung cấp các
+                        dịch vụ tra cứu kỹ thuật số và mượn trả sách tiện lợi. Chào mừng các bạn tân sinh viên tận dụng
+                        tối đa nguồn lực của thư viện để bắt đầu một cuộc sống học tập đại học thật phong phú.</p>
+                    <div class="image-grid"><img src="images/library/lib1.jpg" alt="Thư viện 1"><img
+                            src="images/library/lib2.gif" alt="Thư viện 2"><img src="images/library/lib3.jpg"
+                            alt="Thư viện 3"><img src="images/library/lib4.jpg" alt="Thư viện 4"><img
+                            src="images/library/lib5.jpg" alt="Thư viện 5"><img src="images/library/lib6.jpg"
+                            alt="Thư viện 6"><img src="images/library/lib7.jpg" alt="Thư viện 7"></div>
+                    <h3>Giới thiệu Ký túc xá Sinh viên</h3>
+                    <p>Đại học Khoa học và Công nghệ Long Hoa (LHU) cung cấp ký túc xá trong khuôn viên trường thoải mái
+                        và thuận tiện, giúp sinh viên an tâm học tập và sinh hoạt. Hầu hết các phòng đều được thiết kế
+                        dành cho ba đến bốn người, trang bị đầy đủ các thiết bị cơ bản như giường, bàn học, tủ quần áo
+                        và internet. Ngoài ra, ký túc xá còn cung cấp phòng giặt đồ và không gian sinh hoạt chung để đáp
+                        ứng nhu cầu hàng ngày. Hệ thống quản lý kiểm soát ra vào được áp dụng để đảm bảo an ninh và chất
+                        lượng cuộc sống. Tọa lạc gần khu vực học tập và các tiện ích trong trường với giao thông thuận
+                        lợi, đây là lựa chọn lưu trú lý tưởng cho sinh viên.</p>
+                    <div class="image-grid"><img src="images/dorm/dorm1.png" alt="Ký túc xá 1"><img
+                            src="images/dorm/dorm2.jpg" alt="Ký túc xá 2"><img src="images/dorm/dorm3.jpg"
+                            alt="Ký túc xá 3"><img src="images/dorm/dorm4.jpg" alt="Ký túc xá 4"><img
+                            src="images/dorm/dorm5.jpg" alt="Ký túc xá 5"><img src="images/dorm/dorm6.jpg"
+                            alt="Ký túc xá 6"><img src="images/dorm/dorm7.jpg" alt="Ký túc xá 7"><img
+                            src="images/dorm/dorm8.jpg" alt="Ký túc xá 8"></div>
+                </div>
+                <div id="vi-tab4" class="tab-content">
+                    <h2>Thời gian khai giảng</h2>
+                    <p><strong>Hạn chót nộp hồ sơ:</strong> 45 ngày (khoảng 1,5 tháng) trước ngày khai giảng của mỗi kỳ
+                        học.</p>
+                    <ul>
+                        <li><strong>Kỳ mùa Thu:</strong> Khai giảng vào ngày 05/03/2026 (Sử dụng giáo trình: A Course in
+                            Contemporary Chinese - Tập 2). Hiện đã hết hạn đăng ký.</li>
+                        <li><strong>Kỳ mùa Xuân:</strong> Dự kiến khai giảng vào ngày 23/03/2026 (Sử dụng giáo trình: A
+                            Course in Contemporary Chinese - Tập 1). Hiện đã hết hạn đăng ký.</li>
+                    </ul>
+                    <p><em>Ghi chú: Ngày khai giảng thực tế có thể được điều chỉnh tùy theo tình hình thực tế.</em></p>
+                </div>
+                <div id="vi-tab5" class="tab-content">
+                    <h2>Giới thiệu khóa học</h2>
+                    <div class="single-image"><img src="images/coursemap.png" alt="Course Map"></div>
+                    <ul>
+                        <li>Trung tâm mở các khóa học tiếng Hoa vào hai kỳ hàng năm: kỳ mùa Xuân và kỳ mùa Thu.</li>
+                        <li>Mỗi học kỳ có thời lượng học 20 giờ mỗi tuần, kéo dài trong 18 tuần, tổng cộng 360 giờ.</li>
+                        <li>Học viên sẽ được phân lớp dựa trên năng lực tiếng Hoa thực tế để sắp xếp vào lớp học phù hợp
+                            nhất.</li>
+                        <li>Hiện tại trung tâm chỉ mở các khóa học tiếng Hoa trình độ căn bản: Học kỳ 1 sử dụng giáo
+                            trình "A Course in Contemporary Chinese (Cuốn 1)", học kỳ 2 sử dụng "Cuốn 2".</li>
+                        <li>Thời gian lên lớp được thực hiện theo thời khóa biểu quy định của từng lớp.</li>
+                    </ul>
+                </div>
+                <div id="vi-tab6" class="tab-content">
+                    <h2>Thông tin Chi phí</h2>
+                    <h3>Học phí</h3>
+                    <ul>
+                        <li>Kỳ mùa Thu: 39,000 TWD (Tân Đài tệ)</li>
+                        <li>Kỳ mùa Xuân: 39,000 TWD (Tân Đài tệ)</li>
+                    </ul>
+                    <h3>Phí nội trú</h3>
+                    <ul>
+                        <li>Kỳ mùa Thu: 15,700 TWD</li>
+                        <li>Kỳ mùa Xuân: 15,700 TWD</li>
+                    </ul>
+                </div>
+                <div id="vi-tab7" class="tab-content">
+                    <h2>Đăng ký & Tuyển sinh</h2>
+                    <h3>Biểu mẫu đăng ký nhập học</h3>
+                    <ul>
+                        <li><a href="https://oia.lhu.edu.tw/var/file/7/1007/img/45/165860001.pdf" target="_blank">📄 Đơn
+                                đăng ký nhập học dành cho sinh viên hệ tiếng Hoa (Đã hiệu đính)</a></li>
+                        <li><a href="https://appliform.lhu.edu.tw/" target="_blank">🌐 Hệ thống đăng ký nhập học dành
+                                cho sinh viên quốc tế</a></li>
+                        <li><a href="https://oia.lhu.edu.tw/var/file/7/1007/img/45/552929856.pdf" target="_blank">📄
+                                Những điều cần lưu ý khi đăng ký nhập học dành cho sinh viên quốc tế</a></li>
+                    </ul>
+                    <h3>Quy định tuyển sinh (Hồ sơ xin nhập học)</h3>
+                    <ul>
+                        <li><strong>Đơn xin nhập học</strong></li>
+                        <li><strong>Chứng minh tài chính:</strong> Giấy xác nhận số dư tài khoản ngân hàng (bản giấy)
+                            tối thiểu 2.500 USD hoặc giá trị tương đương bằng đơn vị tiền tệ của quốc gia bạn.</li>
+                        <li><strong>Bản sao hộ chiếu hoặc Thẻ cư trú (ARC):</strong> Nếu tại thời điểm nộp hồ sơ chưa có
+                            hộ chiếu, có thể bổ sung khi đến báo nhập học.</li>
+                        <li><strong>Đối tượng ứng tuyển:</strong> Người nộp đơn phải là sinh viên quốc tế không có tư
+                            cách Kiều sinh và không có quốc tịch Trung Hoa Dân Quốc (Đài Loan) (không bao gồm sinh viên
+                            đến từ Hồng Kông, Ma Cao và Trung Quốc đại lục).</li>
+                    </ul>
+                    <p><em>Ghi chú: Những người đã có Thẻ cư trú (ARC) (nghĩa là không cần Giấy chứng nhận đang theo học
+                            của Trung tâm để gia hạn visa) sẽ được miễn nộp chứng minh tài chính, chỉ cần gửi kèm bản
+                            sao Thẻ cư trú (ARC).</em></p>
+                </div>
+                <div id="vi-tab8" class="tab-content">
+                    <h2>Thông tin liên hệ</h2>
+                    <p><strong>Địa chỉ:</strong> Số 300, Đoạn 1, Đường Wanshou, Quận Guishan, Thành phố Taoyuan 333326,
+                        Đài Loan (R.O.C.)</p>
+                    <p><strong>Điện thoại:</strong> +886-2-82093211 máy lẻ 2506</p>
+                    <p><strong>Email:</strong> <a href="mailto:mina@gm.lhu.edu.tw">mina@gm.lhu.edu.tw</a></p>
+                </div>
+            </div>
+
+            <!-- 泰文內容 (圖片路徑相同，省略長文保持簡潔，但保留圖片網格) -->
+            <div id="content-th" class="lang-section">
+                <div id="th-tab1" class="tab-content active">
+                    <h2>เกี่ยวกับศูนย์ภาษาจีน</h2>
+                    <p>มหาวิทยาลัยวิทยาศาสตร์และเทคโนโลยีหลงหัว (LHU) เป็นสถาบันอุดมศึกษาที่มีประวัติยาวนาน
+                        โดยมุ่งเน้นทั้งการศึกษาทางวิชาชีพและการศึกษารอบด้าน (Holistic Education)</p>
+                    <p>ศูนย์ภาษาจีนภายใต้สังกัดสำนักความร่วมมือระหว่างประเทศและช่องแคบไต้หวัน
+                        มีทีมคณาจารย์ที่เข้มแข็งและอุปกรณ์การเรียนการสอนที่ครบครัน
+                        อาจารย์ผู้สอนทุกคนล้วนเป็นผู้ทรงคุณวุฒิที่มีประสบการณ์ด้านการสอนภาษาจีนมาอย่างยาวนาน</p>
+                    <p>ศูนย์ภาษาจีนมุ่งเน้นการตอบสนองความต้องการของนักศึกษาต่างชาติผ่านหลักสูตรภาษาจีนที่หลากหลาย
+                        เพื่อให้นักศึกษาปรับตัวเข้ากับวิถีชีวิตในไต้หวันได้อย่างรวดเร็ว
+                        นอกจากหลักสูตรปกติในห้องเรียนแล้ว
+                        ทางศูนย์ยังมีการจัดกิจกรรมทางวัฒนธรรมและการทัศนศึกษาภายนอกอย่างสม่ำเสมอ
+                        เพื่อช่วยให้นักศึกษาได้เรียนรู้ภาษาจีนอย่างมีความสุขในสภาพแวดล้อมที่จริงใจและเป็นกันเอง</p>
+                </div>
+                <div id="th-tab2" class="tab-content">
+                    <h2>บุคลากรและขอบเขตหน้าที่</h2>
+                    <table>
+                        <tr>
+                            <th>ชื่อ-นามสกุล</th>
+                            <th>เบอร์โทรศัพท์</th>
+                            <th>อีเมล</th>
+                            <th>หน้าที่ความรับผิดชอบ</th>
+                        </tr>
+                        <tr>
+                            <td>He, Sin-Yun</td>
+                            <td>+886-2-82093211 #2508</td>
+                            <td>violet@gm.lhu.edu.tw</td>
+                            <td>ผู้อำนวยการศูนย์ภาษาจีน<br>บริหารจัดการงานและนโยบายในภาพรวมทั้งหมดของศูนย์ภาษาจีน</td>
+                        </tr>
+                        <tr>
+                            <td>Tristan Le</td>
+                            <td>+886-2-82093211 #2510</td>
+                            <td>tristanlpd@mail.lhu.edu.tw</td>
+                            <td>
+                                1.
+                                ประสานงานการทดสอบวัดระดับและจัดชั้นเรียนสำหรับหลักสูตรมุ่งใต้ใหม่และนักศึกษาโครงการพิเศษ<br>
+                                2. รวบรวมและวิเคราะห์ผลคะแนนสอบ TOCFL เพื่อติดตามความก้าวหน้าทางการเรียน<br>
+                                3. ตรวจสอบและประเมินผลการเรียนการสอนในชั้นเรียนเป็นประจำ<br>
+                                4. จัดการดูแลการใช้ห้องเรียนและประสานงานด้านวิชาการ<br>
+                                5. สนับสนุนงานธุรการและงานบริการด้านการสอนตามที่ได้รับมอบหมาย
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Chiu, Yu-Ting</td>
+                            <td>+886-2-82093211 #2506</td>
+                            <td>mina@gm.lhu.edu.tw</td>
+                            <td>
+                                1. ดูแลงานรับสมัครและลงทะเบียนนักศึกษาใหม่<br>
+                                2. ออกเอกสารสำคัญและใบรับรองต่างๆ สำหรับนักศึกษา<br>
+                                3. ประสานงานการสมัครสอบวัดระดับความรู้ภาษาจีน (TOCFL) รายเดือน<br>
+                                4. จัดการทดสอบวัดระดับภาษาจีนเบื้องต้น (Screening Test)<br>
+                                5. สนับสนุนงานธุรการทั่วไปสำหรับอาจารย์ผู้สอน<br>
+                                6. ปฏิบัติงานอื่นๆ ตามที่ได้รับมอบหมาย
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div id="th-tab3" class="tab-content">
+                    <h2>สภาพแวดล้อมการเรียน</h2>
+                    <h3>สิ่งอำนวยความสะดวก</h3>
+                    <p>ศูนย์ของเรามี ห้องเรียนสำหรับเรียนภาษาจีนโดยเฉพาะจำนวน 17 ห้อง
+                        เพื่อสร้างบรรยากาศการเรียนรู้ที่สะดวกสบายและเป็นมืออาชีพ
+                        ภายในห้องเรียนประกอบด้วยคอมพิวเตอร์สำหรับอาจารย์ผู้สอน อุปกรณ์โปรเจกเตอร์
+                        และกระดานไวท์บอร์ดกระจก นอกจากนี้ ในบางห้องเรียนยังมี หน้าจอสัมผัส (Touchscreen)
+                        เพื่อเสริมสร้างการมีส่วนร่วมในชั้นเรียนและเพิ่มประสิทธิภาพในการเรียนรู้ให้ดียิ่งขึ้น</p>
+                    <div class="image-grid"><img src="images/classroom/classroom1.jpg" alt="ห้องเรียน 1"><img
+                            src="images/classroom/classroom2.jpg" alt="ห้องเรียน 2"><img
+                            src="images/classroom/classroom3.jpg" alt="ห้องเรียน 3"><img
+                            src="images/classroom/classroom4.jpg" alt="ห้องเรียน 4"><img
+                            src="images/classroom/classroom5.jpg" alt="ห้องเรียน 5"><img
+                            src="images/classroom/classroom6.jpg" alt="ห้องเรียน 6"><img
+                            src="images/classroom/classroom7.jpg" alt="ห้องเรียน 7"><img
+                            src="images/classroom/classroom8.jpg" alt="ห้องเรียน 8"></div>
+                    <h3>แนะนำห้องสมุด</h3>
+                    <p>ห้องสมุดมหาวิทยาลัยวิทยาศาสตร์และเทคโนโลยีหลงหัวเป็นพื้นที่การเรียนรู้ที่สำคัญของวิทยาเขต
+                        โดยมีทรัพยากรหนังสือและสื่ออิเล็กทรอนิกส์ที่หลากหลายเพื่อช่วยให้นักศึกษาใหม่ปรับตัวเข้ากับหลักสูตรมหาวิทยาลัยได้อย่างรวดเร็ว
+                        ภายในห้องสมุดมีโซนอ่านหนังสือที่เงียบสงบและที่นั่งสำหรับอ่านหนังสือสอบหรือเตรียมรายงาน
+                        นอกจากนี้ยังมีบริการสืบค้นข้อมูลดิจิทัลและบริการยืม-คืนที่สะดวกสบาย
+                        จึงขอเชิญชวนให้นักศึกษาใหม่ใช้ประโยชน์จากทรัพยากรของห้องสมุดอย่างเต็มที่
+                        เพื่อเริ่มต้นชีวิตการเรียนในมหาวิทยาลัยที่สมบูรณ์และคุ้มค่า</p>
+                    <div class="image-grid"><img src="images/library/lib1.jpg" alt="ห้องสมุด 1"><img
+                            src="images/library/lib2.gif" alt="ห้องสมุด 2"><img src="images/library/lib3.jpg"
+                            alt="ห้องสมุด 3"><img src="images/library/lib4.jpg" alt="ห้องสมุด 4"><img
+                            src="images/library/lib5.jpg" alt="ห้องสมุด 5"><img src="images/library/lib6.jpg"
+                            alt="ห้องสมุด 6"><img src="images/library/lib7.jpg" alt="ห้องสมุด 7"></div>
+                    <h3>แนะนำหอพักนักศึกษา</h3>
+                    <p>มหาวิทยาลัยวิทยาศาสตร์และเทคโนโลยีหลงหัว (LHU) ให้บริการหอพักภายในมหาวิทยาลัยที่สะดวกสบาย
+                        เพื่อให้นักศึกษาได้เรียนรู้และใช้ชีวิตได้อย่างอุ่นใจ ห้องพักส่วนใหญ่เป็นแบบพักรวม 3-4 คน
+                        พร้อมสิ่งอำนวยความสะดวกพื้นฐานครบครัน เช่น เตียงนอน โต๊ะเขียนหนังสือ ตู้เสื้อผ้า และอินเทอร์เน็ต
+                        นอกจากนี้ยังมีห้องซักรีดและพื้นที่ส่วนกลางสำหรับพักผ่อนเพื่อตอบโจทย์การใช้ชีวิตประจำวัน
+                        หอพักใช้ระบบควบคุมการเข้า-ออกที่เข้มงวดเพื่อความปลอดภัยและคุณภาพชีวิตของผู้พักอาศัย
+                        ด้วยทำเลที่ตั้งใกล้กับอาคารเรียนและสิ่งอำนวยความสะดวกต่าง ๆ พร้อมการเดินทางที่สะดวกสบาย หอพักของ
+                        LHU จึงเป็นทางเลือกที่พักที่เหมาะสมที่สุดสำหรับนักศึกษา</p>
+                    <div class="image-grid"><img src="images/dorm/dorm1.png" alt="หอพัก 1"><img
+                            src="images/dorm/dorm2.jpg" alt="หอพัก 2"><img src="images/dorm/dorm3.jpg"
+                            alt="หอพัก 3"><img src="images/dorm/dorm4.jpg" alt="หอพัก 4"><img
+                            src="images/dorm/dorm5.jpg" alt="หอพัก 5"><img src="images/dorm/dorm6.jpg"
+                            alt="หอพัก 6"><img src="images/dorm/dorm7.jpg" alt="หอพัก 7"><img
+                            src="images/dorm/dorm8.jpg" alt="หอพัก 8"></div>
+                </div>
+                <div id="th-tab4" class="tab-content">
+                    <h2>กำหนดการเปิดเรียน</h2>
+                    <p><strong>กำหนดการปิดรับสมัคร:</strong> 45 วัน (ประมาณ 1 เดือนครึ่ง)
+                        ก่อนวันเปิดภาคเรียนของแต่ละเทอม</p>
+                    <ul>
+                        <li><strong>ภาคเรียนฤดูใบไม้ร่วง:</strong> เริ่มเรียนวันที่ 5 มีนาคม 2026 (ใช้ตำราเรียน: A
+                            Course in Contemporary Chinese เล่ม 2) ขณะนี้ปิดรับสมัครแล้ว</li>
+                        <li><strong>ภาคเรียนฤดูใบไม้ผลิ:</strong> คาดว่าจะเริ่มเรียนวันที่ 23 มีนาคม 2026 (ใช้ตำราเรียน:
+                            A Courseใน Contemporary Chinese เล่ม 1) ขณะนี้ปิดรับสมัครแล้ว</li>
+                    </ul>
+                    <p><em>หมายเหตุ: วันเปิดเรียนที่แน่นอนอาจมีการเปลี่ยนแปลงตามความเหมาะสมของสถานการณ์จริง</em></p>
+                </div>
+                <div id="th-tab5" class="tab-content">
+                    <h2>แนะนำหลักสูตร</h2>
+                    <div class="single-image"><img src="images/coursemap.png" alt="Course Map"></div>
+                    <ul>
+                        <li>ศูนย์ภาษาจีนเปิดสอนหลักสูตรภาษาจีนปีละ 2 ภาคเรียน ได้แก่
+                            ภาคเรียนฤดูใบไม้ผลิและภาคเรียนฤดูใบไม้ร่วง</li>
+                        <li>ทั้งสองภาคเรียนมีเวลาเรียน 20 ชั่วโมงต่อสัปดาห์ เป็นเวลา 18 สัปดาห์ รวมทั้งสิ้น 360
+                            ชั่วโมงต่อภาคเรียน</li>
+                        <li>นักศึกษาจะได้รับการจัดเข้าชั้นเรียนตามระดับความสามารถภาษาจีน
+                            เพื่อให้ได้เรียนในชั้นเรียนที่เหมาะสมที่สุด</li>
+                        <li>ปัจจุบันเปิดสอนเฉพาะหลักสูตรภาษาจีนระดับพื้นฐาน: ภาคเรียนที่ 1 ใช้ตำราเรียน "A Course in
+                            Contemporary Chinese (เล่ม 1)" และภาคเรียนที่ 2 ใช้ "เล่ม 2"</li>
+                        <li>ช่วงเวลาเรียนจะเป็นไปตามตารางสอนที่กำหนดของแต่ละชั้นเรียน</li>
+                    </ul>
+                </div>
+                <div id="th-tab6" class="tab-content">
+                    <h2>ค่าใช้จ่าย</h2>
+                    <h3>ค่าธรรมเนียมการเรียน</h3>
+                    <ul>
+                        <li>ภาคเรียนฤดูใบไม้ร่วง : 39,000 TWD (ดอลลาร์ไต้หวันใหม่)</li>
+                        <li>ภาคเรียนฤดูใบไม้ผลิ : 39,000 TWD (ดอลลาร์ไต้หวันใหม่)</li>
+                    </ul>
+                    <h3>ค่าหอพัก (ค่าที่พัก)</h3>
+                    <ul>
+                        <li>ภาคเรียนฤดูใบไม้ร่วง : 15,700 TWD</li>
+                        <li>ภาคเรียนฤดูใบไม้ผลิ : 15,700 TWD</li>
+                    </ul>
+                </div>
+                <div id="th-tab7" class="tab-content">
+                    <h2>การสมัครเรียน</h2>
+                    <h3>แบบฟอร์มการสมัครเรียน</h3>
+                    <ul>
+                        <li><a href="https://oia.lhu.edu.tw/var/file/7/1007/img/45/165860001.pdf" target="_blank">📄
+                                แบบฟอร์มใบสมัครเรียนหลักสูตรภาษาจีน</a></li>
+                        <li><a href="https://appliform.lhu.edu.tw/" target="_blank">🌐
+                                ระบบรับสมัครนักศึกษาต่างชาติออนไลน์</a></li>
+                        <li><a href="https://oia.lhu.edu.tw/var/file/7/1007/img/45/552929856.pdf" target="_blank">📄
+                                ข้อควรระวังและข้อกำหนดในการสมัครเรียนสำหรับนักศึกษาต่างชาติ</a></li>
+                    </ul>
+                    <h3>ระเบียบการรับสมัคร</h3>
+                    <ul>
+                        <li><strong>แบบฟอร์มใบสมัครเข้าเรียน</strong></li>
+                        <li><strong>หลักฐานแสดงฐานะทางการเงิน:</strong> หนังสือรับรองยอดเงินฝากจากธนาคาร (ฉบับจริง)
+                            อย่างน้อย 2,500 ดอลลาร์สหรัฐ (USD) หรือมูลค่าเทียบเท่าในสกุลเงินท้องถิ่นของท่าน</li>
+                        <li><strong>สำเนาหนังสือเดินทาง หรือ บัตรถิ่นที่อยู่ (ARC):</strong>
+                            หากในขณะสมัครยังไม่มีหนังสือเดินทาง สามารถนำมาส่งมอบได้ในวันรายงานตัว</li>
+                        <li><strong>คุณสมบัติผู้สมัคร:</strong> ผู้สมัครต้องเป็นนักศึกษาต่างชาติที่ ไม่มี
+                            สถานะนักศึกษาจีนโพ้นทะเล (僑生) และ ไม่มี สัญชาติสาธารณรัฐจีน (ไต้หวัน)
+                            (ไม่รวมนักศึกษาจากฮ่องกง มาเก๊า และจีนแผ่นดินใหญ่)</li>
+                    </ul>
+                    <p><em>หมายเหตุ: สำหรับผู้ที่มี บัตรถิ่นที่อยู่ (ARC) อยู่แล้ว (กล่าวคือ
+                            ไม่ต้องการใบรับรองการเรียนจากทางศูนย์เพื่อใช้ต่ออายุวีซ่า) ไม่ต้องยื่นหลักฐานทางการเงิน
+                            เพียงแนบสำเนาบัตร ARC เท่านั้น</em></p>
+                </div>
+                <div id="th-tab8" class="tab-content">
+                    <h2>ข้อมูลการติดต่อ</h2>
+                    <p><strong>ที่อยู่:</strong> เลขที่ 300 ส่วนที่ 1 ถนน Wanshou เขต Guishan เมือง Taoyuan 333326
+                        ไต้หวัน (R.O.C.)</p>
+                    <p><strong>โทรศัพท์:</strong> +886-2-82093211 ต่อ 2506</p>
+                    <p><strong>อีเมล:</strong> <a href="mailto:mina@gm.lhu.edu.tw">mina@gm.lhu.edu.tw</a></p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let currentLang = 'zh';
+        let currentTab = 'tab1';
+
+        function changeLanguage(langCode) {
+            currentLang = langCode;
+
+            // 1. Hide all language menus and content sections
+            document.querySelectorAll('.nav-menu').forEach(menu => menu.classList.remove('active'));
+            document.querySelectorAll('.lang-section').forEach(section => section.classList.remove('active'));
+
+            // 2. Show the selected language menu and content section
+            document.getElementById('menu-' + langCode).classList.add('active');
+            document.getElementById('content-' + langCode).classList.add('active');
+
+            // 3. Keep the user on the same subtab they were reading
+            switchTab(currentTab);
+
+            // 4. Update HTML language attribute
+            document.documentElement.lang = langCode === 'zh' ? 'zh-TW' : langCode;
+        }
+
+        function switchTab(tabId) {
+            currentTab = tabId;
+
+            // 1. Remove active styling from all menu list items across all languages
+            document.querySelectorAll('.nav-menu li').forEach(li => li.classList.remove('active'));
+
+            // 2. Find the index of the clicked tab to activate it in the CURRENT language's menu
+            const targetMenu = document.getElementById('menu-' + currentLang);
+            const menuItems = Array.from(targetMenu.children);
+            const tabIndex = parseInt(tabId.replace('tab', '')) - 1;
+
+            if (menuItems[tabIndex]) {
+                menuItems[tabIndex].classList.add('active');
+            }
+
+            // 3. Hide all content divs inside the current language
+            const activeContentSection = document.getElementById('content-' + currentLang);
+            activeContentSection.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            // 4. Show the specific content div for the active tab and language
+            const targetContent = document.getElementById(currentLang + '-' + tabId);
+            if (targetContent) {
+                targetContent.classList.add('active');
+            }
+        }
+    </script>
+</body>
+
+</html>
+```
